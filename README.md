@@ -1,70 +1,211 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Step 1: Setup the React Project
+1.1 Open a Terminal and Run:
+npx create-react-app react-calendar-app
+cd react-calendar-app
+npm install react-big-calendar date-fns
+npm start
 
-## Available Scripts
+  The default React app should be running on localhost:3000.
 
-In the project directory, you can run:
 
-### `npm start`
+Step 2: Clean Up the Project
+Open src/App.js and remove all code, replacing it with:
+import React from "react";
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+function App() {
+  return <h1> React Calendar</h1>;
+}
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+export default App;
 
-### `npm test`
+ Check localhost → Should display " React Calendar".
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Step 3: Install & Import Calendar Dependencies
+Ensure react-big-calendar and date-fns are installed (already done in Step 1).
+Modify src/App.js and add the imports:
+import React, { useState } from "react";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { format, parse, startOfWeek, getDay } from "date-fns";
+import enUS from "date-fns/locale/en-US";
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Step 4: Setup Date Localizer
+Under the imports, add:
+const locales = { "en-US": enUS };
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ Prepares date localization for react-big-calendar.
 
-### `npm run eject`
+Step 5: Add a Basic Calendar
+Modify App.js to return a calendar component:
+function App() {
+  return (
+    <div style={{ height: "80vh", padding: "20px" }}>
+      <h1> React Calendar</h1>
+      <Calendar
+        localizer={localizer}
+        events={[]} // Empty events initially
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: "100%" }}
+      />
+    </div>
+  );
+}
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+ Check localhost → Should display a blank calendar.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Step 6: Add State for Events
+Modify App.js to track events:
+const [myEvents, setMyEvents] = useState([]);
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+ Now we can store events dynamically.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Step 7: Enable Clicking to Add Events
+Add a function to handle date selection:
+const handleSelectSlot = ({ start }) => {
+  const title = window.prompt("Enter event title:");
+  if (title) {
+    setMyEvents([...myEvents, { title, start, end: start }]);
+  }
+};
 
-## Learn More
+ Clicking a date now opens a prompt to enter an event title.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Step 8: Update the Calendar Component
+Modify <Calendar> to enable event selection:
+<Calendar
+  localizer={localizer}
+  events={myEvents}
+  startAccessor="start"
+  endAccessor="end"
+  selectable
+  onSelectSlot={handleSelectSlot}
+  style={{ height: "100%" }}
+/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+ Now, clicking on a date adds an event to the calendar.
 
-### Code Splitting
+Step 9: Add Navigation (Today/Next/Back)
+Add state to track the current date:
+const [currentDate, setCurrentDate] = useState(new Date());
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Add function to handle navigation:
+const handleNavigate = (date) => {
+  setCurrentDate(date);
+};
 
-### Analyzing the Bundle Size
+Modify <Calendar> to include navigation:
+<Calendar
+  localizer={localizer}
+  events={myEvents}
+  startAccessor="start"
+  endAccessor="end"
+  selectable
+  onSelectSlot={handleSelectSlot}
+  date={currentDate} // Track current date
+  onNavigate={handleNavigate} // Enable navigation
+  style={{ height: "100%" }}
+/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+ Now, "Today", "Next", and "Back" buttons work.
 
-### Making a Progressive Web App
+Step 10: Enable View Switching
+Add state to track the current view:
+const [currentView, setCurrentView] = useState("month");
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Add function to handle view switching:
+const handleViewChange = (view) => {
+  setCurrentView(view);
+};
 
-### Advanced Configuration
+Modify <Calendar> to support different views:
+<Calendar
+  localizer={localizer}
+  events={myEvents}
+  startAccessor="start"
+  endAccessor="end"
+  selectable
+  onSelectSlot={handleSelectSlot}
+  date={currentDate}
+  onNavigate={handleNavigate}
+  view={currentView} // Track view state
+  onView={handleViewChange} // Enable view switching
+  views={{ month: true, week: true, day: true, agenda: true }} // Enable all views
+  style={{ height: "100%" }}
+/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+ Now the Month, Week, Day, and Agenda buttons work.
 
-### Deployment
+Final Code (Full App.js)
+import React, { useState } from "react";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { format, parse, startOfWeek, getDay } from "date-fns";
+import enUS from "date-fns/locale/en-US";
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+const locales = { "en-US": enUS };
+const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
 
-### `npm run build` fails to minify
+function App() {
+  const [myEvents, setMyEvents] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentView, setCurrentView] = useState("month");
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  // Handle navigation (Today, Next, Back buttons)
+  const handleNavigate = (date) => {
+    setCurrentDate(date);
+  };
+
+  // Handle view switching (Month, Week, Day, Agenda)
+  const handleViewChange = (view) => {
+    setCurrentView(view);
+  };
+
+  // Handle clicking on a date to add an event
+  const handleSelectSlot = ({ start }) => {
+    const title = window.prompt("Enter event title:");
+    if (title) {
+      setMyEvents([...myEvents, { title, start, end: start }]);
+    }
+  };
+
+  return (
+    <div style={{ height: "80vh", padding: "20px" }}>
+      <h1 style={{ textAlign: "center" }}> React Calendar</h1>
+
+      <Calendar
+        localizer={localizer}
+        events={myEvents}
+        startAccessor="start"
+        endAccessor="end"
+        selectable
+        onSelectSlot={handleSelectSlot}
+        date={currentDate}
+        onNavigate={handleNavigate}
+        view={currentView}
+        onView={handleViewChange}
+        views={{ month: true, week: true, day: true, agenda: true }}
+        style={{ height: "100%" }}
+      />
+    </div>
+  );
+}
+
+export default App;
+
+
+ Summary: What We Built
+- Functional Calendar with Event Creation
+- Click to Add Events via a Simple Prompt
+- Navigation (Today, Next, Back)
+- View Switching (Month, Week, Day, Agenda)
