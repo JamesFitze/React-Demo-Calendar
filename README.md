@@ -1,4 +1,4 @@
-
+```
 Step 1: Setup the React Project
 1.1 Open a Terminal and Run:
 npx create-react-app react-calendar-app
@@ -209,3 +209,4 @@ export default App;
 - Click to Add Events via a Simple Prompt
 - Navigation (Today, Next, Back)
 - View Switching (Month, Week, Day, Agenda)
+```
