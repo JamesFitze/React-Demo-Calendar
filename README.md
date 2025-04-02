@@ -9,6 +9,7 @@ cd react-calendar-app
 npm install react-big-calendar date-fns
 npm start
 
+
 The default React app should be running on localhost:3000.
 
 
