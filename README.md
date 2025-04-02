@@ -3,17 +3,22 @@ Step 1: Setup the React Project
 
 1.1 Open a Terminal and Run:
 
+
 npx create-react-app react-calendar-app
 cd react-calendar-app
 npm install react-big-calendar date-fns
 npm start
 
-  The default React app should be running on localhost:3000.
+The default React app should be running on localhost:3000.
+
+
+
 
 
 Step 2: Clean Up the Project
 
 Open src/App.js and remove all code, replacing it with:
+
 
 import React from "react";
 
@@ -23,13 +28,19 @@ function App() {
 
 export default App;
 
+
  Check localhost → Should display " React Calendar".
+
+
+
+
 
 Step 3: Install & Import Calendar Dependencies
 
 Ensure react-big-calendar and date-fns are installed (already done in Step 1).
 
 Modify src/App.js and add the imports:
+
 
 import React, { useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
@@ -38,9 +49,13 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 
 
+
+
+
 Step 4: Setup Date Localizer
 
 Under the imports, add:
+
 
 const locales = { "en-US": enUS };
 
@@ -52,11 +67,17 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
+
  Prepares date localization for react-big-calendar.
+
+
+
+
 
 Step 5: Add a Basic Calendar
 
 Modify App.js to return a calendar component:
+
 
 function App() {
   return (
@@ -73,19 +94,31 @@ function App() {
   );
 }
 
+
  Check localhost → Should display a blank calendar.
+
+
+
+
 
 Step 6: Add State for Events
 
 Modify App.js to track events:
 
+
 const [myEvents, setMyEvents] = useState([]);
 
+
  Now we can store events dynamically.
+
+
+
+
 
 Step 7: Enable Clicking to Add Events
 
 Add a function to handle date selection:
+
 
 const handleSelectSlot = ({ start }) => {
   const title = window.prompt("Enter event title:");
@@ -94,11 +127,17 @@ const handleSelectSlot = ({ start }) => {
   }
 };
 
+
  Clicking a date now opens a prompt to enter an event title.
+
+
+
+
 
 Step 8: Update the Calendar Component
 
 Modify <Calendar> to enable event selection:
+
 
 <Calendar
   localizer={localizer}
@@ -110,11 +149,17 @@ Modify <Calendar> to enable event selection:
   style={{ height: "100%" }}
 />
 
+
  Now, clicking on a date adds an event to the calendar.
+
+
+
+
 
 Step 9: Add Navigation (Today/Next/Back)
 
 Add state to track the current date:
+
 
 const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -124,7 +169,9 @@ const handleNavigate = (date) => {
   setCurrentDate(date);
 };
 
+
 Modify <Calendar> to include navigation:
+
 
 <Calendar
   localizer={localizer}
@@ -138,21 +185,31 @@ Modify <Calendar> to include navigation:
   style={{ height: "100%" }}
 />
 
+
  Now, "Today", "Next", and "Back" buttons work.
+
+
+
+
 
 Step 10: Enable View Switching
 
 Add state to track the current view:
 
+
 const [currentView, setCurrentView] = useState("month");
 
+
 Add function to handle view switching:
+
 
 const handleViewChange = (view) => {
   setCurrentView(view);
 };
 
+
 Modify <Calendar> to support different views:
+
 
 <Calendar
   localizer={localizer}
@@ -169,7 +226,12 @@ Modify <Calendar> to support different views:
   style={{ height: "100%" }}
 />
 
+
  Now the Month, Week, Day, and Agenda buttons work.
+
+
+
+
 
 Final Code (Full App.js)
 import React, { useState } from "react";
