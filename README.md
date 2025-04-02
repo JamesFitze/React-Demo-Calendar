@@ -1,7 +1,7 @@
 ```
 Step 1: Setup the React Project
 
-1.1 Open a Terminal and Run:
+Open a Terminal and Run:
 
 
 npx create-react-app react-calendar-app
