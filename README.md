@@ -24,7 +24,12 @@ Open src/App.js and remove all code, replacing it with:
 import React from "react";
 
 function App() {
-  return <h1> React Calendar</h1>;
+
+  return (
+    <div style={{ height: "80vh", padding: "20px" }}>
+      <h1 style={{ textAlign: "center" }}> React Calendar</h1>
+    </div>
+  );
 }
 
 export default App;
